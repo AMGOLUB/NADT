@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podcast - Not Another Depressed Teen</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f5ebe8;
+            --dark-green: #3f4c40;
+            --light-sage: #bcc5b4;
+            --medium-sage: #6c7568;
+            --dark-brown: #5d594e;
+            --light-beige: #e5e3c6;
+            --olive: #606452;
+            --pale-sage: #dae4d1;
+            --taupe: #8d8e7a;
+            --warm-gray: #8f8c84;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--dark-green);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(245, 235, 232, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--medium-sage);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--olive);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--dark-green);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark-green);
+            transition: all 0.3s ease;
+        }
+
+        /* Podcast Hero */
+        .podcast-hero {
+            margin-top: 80px;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(218, 228, 209, 0.3), rgba(188, 197, 180, 0.3));
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .podcast-hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--light-sage) 0%, transparent 70%);
+            opacity: 0.2;
+            top: -250px;
+            right: -250px;
+            animation: pulse 10s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.2;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.15;
+            }
+        }
+
+        .podcast-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .podcast-logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .podcast-hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: var(--dark-green);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .podcast-hero p {
+            font-size: 1.25rem;
+            color: var(--medium-sage);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        .subscribe-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.4s forwards;
+        }
+
+        .subscribe-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid var(--light-sage);
+            border-radius: 25px;
+            text-decoration: none;
+            color: var(--dark-green);
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .subscribe-btn:hover {
+            background: var(--light-sage);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Episodes Section */
+        .episodes-section {
+            padding: 4rem 2rem;
+            background: var(--bg-primary);
+        }
+
+        .episodes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1rem 1rem 3rem;
+            border: 2px solid var(--pale-sage);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 1rem;
+            color: var(--dark-green);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--olive);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--medium-sage);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: var(--medium-sage);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--pale-sage);
+            border-top-color: var(--olive);
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Episode Cards */
+        .episodes-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .episode-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.8s ease-out forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--olive), var(--light-sage), var(--pale-sage));
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .episode-card:hover::before {
+            transform: translateX(0);
+        }
+
+        .episode-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .episode-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .episode-title {
+            font-size: 1.5rem;
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .episode-date {
+            font-size: 0.9rem;
+            color: var(--medium-sage);
+            flex-shrink: 0;
+        }
+
+        .episode-description {
+            color: var(--medium-sage);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .episode-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .play-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--dark-green), var(--olive));
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .play-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .play-button:hover::before {
+            width: 200px;
+            height: 200px;
+        }
+
+        .play-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .episode-duration {
+            color: var(--taupe);
+            font-size: 0.9rem;
+        }
+
+        /* Glassmorphic Audio Player */
+        .audio-player {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: none;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease;
+        }
+
+        .audio-player.active {
+            display: block;
+            animation: slideInPlayer 0.5s ease forwards;
+        }
+
+        @keyframes slideInPlayer {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .player-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 0.25rem;
+        }
+
+        .player-podcast {
+            font-size: 0.85rem;
+            color: var(--medium-sage);
+        }
+
+        audio {
+            width: 100%;
+            outline: none;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.1));
+        }
+
+        /* Load More Button */
+        .load-more-container {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .load-more-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--light-sage);
+            border-radius: 50px;
+            color: var(--dark-green);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .load-more-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--light-sage);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .load-more-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .load-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            color: var(--dark-green);
+        }
+
+        .load-more-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-green);
+            color: var(--bg-primary);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-content a {
+            color: var(--light-sage);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-content a:hover {
+            color: var(--bg-primary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .podcast-hero h1 {
+                font-size: 2rem;
+            }
+
+            .podcast-hero p {
+                font-size: 1.1rem;
+            }
+
+            .subscribe-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .episode-header {
+                flex-direction: column;
+            }
+
+            .episode-title {
+                font-size: 1.25rem;
+            }
+
+            .episode-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .player-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">NADT</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="#" class="active">Podcast</a></li>
+                <li><a href="connectivitystudy.html">Connectivity Study</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Suggestions & Questions</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Podcast Hero -->
+    <section class="podcast-hero">
+        <div class="podcast-hero-content">
+            <img src="https://storage.buzzsprout.com/9m153rg7f8rrc1dbxyyi2gax5vw4?.jpg" alt="Not Another Depressed Teen Podcast" class="podcast-logo">
+            <h1>Not Another Depressed Teen Podcast</h1>
+            <p>Join Aanya and Pranjal Bhartia as they interview mental health professionals and explore topics in neuroscience, mental health, and raising healthy teens.</p>
+            
+            <div class="subscribe-buttons">
+                <a href="https://podcasts.apple.com/au/podcast/not-another-depressed-teen/id1622512933" target="_blank" class="subscribe-btn">
+                    🎵 Apple Podcasts
+                </a>
+                <a href="https://open.spotify.com/show/0t1MWqRLBXdjJrrLEAvFeu?si=40cddb95e2724117" target="_blank" class="subscribe-btn">
+                    🎧 Spotify
+                </a>
+                <a href="https://feeds.buzzsprout.com/1872934.rss" target="_blank" class="subscribe-btn">
+                    📡 RSS Feed
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Episodes Section -->
+    <section class="episodes-section">
+        <div class="episodes-container">
+            <div class="section-header">
+                <h2>All Episodes</h2>
+            </div>
+            
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" placeholder="Search episodes..." id="searchInput">
+            </div>
+            
+            <div id="episodesContainer" class="episodes-grid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading episodes...</p>
+                </div>
+            </div>
+            
+            <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+                <button class="load-more-btn" onclick="loadMoreEpisodes()">
+                    <span>Load More Episodes</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>Questions? Reach out to us at <a href="mailto:info@notanotherdepressedteen.com">info@notanotherdepressedteen.com</a></p>
+            <p>&copy; 2023 Not Another Depressed Teen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '100%';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.background = 'var(--bg-primary)';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.padding = '2rem';
+            navLinks.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+        });
+
+        // RSS Feed URL
+        const RSS_URL = 'https://feeds.buzzsprout.com/1872934.rss';
+        const CORS_PROXY = 'https://api.allorigins.win/get?url=';
+        
+        let allEpisodes = [];
+        let filteredEpisodes = [];
+        let displayedEpisodes = 0;
+        const EPISODES_PER_LOAD = 3;
+        let isSearching = false;
+
+        // Format duration from seconds to readable format
+        function formatDuration(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // Format date to readable format
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        // Clean HTML content
+        function cleanHtml(html) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            return div.textContent || div.innerText || '';
+        }
+
+        // Create episode card HTML
+        function createEpisodeCard(episode, index) {
+            const description = cleanHtml(episode.description);
+            const truncatedDescription = description.length > 200 
+                ? description.substring(0, 200) + '...' 
+                : description;
+
+            return `
+                <div class="episode-card" style="animation-delay: ${index * 0.1}s">
+                    <div class="episode-header">
+                        <h3 class="episode-title">${episode.title}</h3>
+                        <span class="episode-date">${formatDate(episode.pubDate)}</span>
+                    </div>
+                    <p class="episode-description">${truncatedDescription}</p>
+                    <div class="episode-footer">
+                        <button class="play-button" onclick="playEpisode('${episode.enclosure}', ${index}, '${episode.title.replace(/'/g, "\\'")}')">
+                            <span id="playIcon-${index}">▶</span> Play Episode
+                        </button>
+                        <span class="episode-duration">${formatDuration(episode.duration)}</span>
+                    </div>
+                    <div class="audio-player" id="audioPlayer-${index}">
+                        <div class="player-header">
+                            <img src="https://storage.buzzsprout.com/9m153rg7f8rrc1dbxyyi2gax5vw4?.jpg" alt="Podcast Logo" class="player-logo">
+                            <div class="player-info">
+                                <div class="player-title">${episode.title}</div>
+                                <div class="player-podcast">Not Another Depressed Teen</div>
+                            </div>
+                        </div>
+                        <audio controls id="audio-${index}">
+                            <source src="${episode.enclosure}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Play episode
+        function playEpisode(url, index, title) {
+            const currentPlayer = document.getElementById(`audioPlayer-${index}`);
+            const currentAudio = document.getElementById(`audio-${index}`);
+            const currentIcon = document.getElementById(`playIcon-${index}`);
+            const currentButton = currentIcon.parentElement;
+            
+            // If this player is already active and playing
+            if (currentPlayer.classList.contains('active') && !currentAudio.paused) {
+                currentAudio.pause();
+                currentIcon.textContent = '▶';
+                currentButton.innerHTML = '<span id="playIcon-' + index + '">▶</span> Play Episode';
+                return;
+            }
+            
+            // Hide all other players
+            document.querySelectorAll('.audio-player').forEach(player => {
+                player.classList.remove('active');
+            });
+            
+            // Stop all other audio
+            document.querySelectorAll('audio').forEach((audio, i) => {
+                if (audio !== currentAudio) {
+                    audio.pause();
+                    const icon = document.getElementById(`playIcon-${i}`);
+                    if (icon) {
+                        icon.textContent = '▶';
+                        icon.parentElement.innerHTML = '<span id="playIcon-' + i + '">▶</span> Play Episode';
+                    }
+                }
+            });
+            
+            // Show current player and play
+            currentPlayer.classList.add('active');
+            currentAudio.play();
+            currentIcon.textContent = '⏸';
+            currentButton.innerHTML = '<span id="playIcon-' + index + '">⏸</span> Pause Episode';
+            
+            // Update icon when audio is paused/played
+            currentAudio.addEventListener('pause', () => {
+                currentIcon.textContent = '▶';
+                currentButton.innerHTML = '<span id="playIcon-' + index + '">▶</span> Play Episode';
+            });
+            
+            currentAudio.addEventListener('play', () => {
+                currentIcon.textContent = '⏸';
+                currentButton.innerHTML = '<span id="playIcon-' + index + '">⏸</span> Pause Episode';
+            });
+            
+            // Update icon when audio ends
+            currentAudio.addEventListener('ended', () => {
+                currentIcon.textContent = '▶';
+                currentButton.innerHTML = '<span id="playIcon-' + index + '">▶</span> Play Episode';
+            });
+        }
+
+        // Display episodes
+        function displayEpisodes(episodes, append = false) {
+            const container = document.getElementById('episodesContainer');
+            
+            if (!append) {
+                container.innerHTML = '';
+                displayedEpisodes = 0;
+            }
+            
+            if (episodes.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--medium-sage);">No episodes found.</p>';
+                document.getElementById('loadMoreContainer').style.display = 'none';
+                return;
+            }
+            
+            const start = displayedEpisodes;
+            const end = Math.min(start + EPISODES_PER_LOAD, episodes.length);
+            
+            const newEpisodes = episodes.slice(start, end).map((episode, index) => 
+                createEpisodeCard(episode, start + index)
+            ).join('');
+            
+            if (append) {
+                // Create a temporary container to hold new episodes
+                const temp = document.createElement('div');
+                temp.innerHTML = newEpisodes;
+                
+                // Append each new episode card individually
+                while (temp.firstChild) {
+                    container.appendChild(temp.firstChild);
+                }
+            } else {
+                container.innerHTML = newEpisodes;
+            }
+            
+            displayedEpisodes = end;
+            
+            // Show/hide load more button
+            const loadMoreContainer = document.getElementById('loadMoreContainer');
+            if (displayedEpisodes < episodes.length && !isSearching) {
+                loadMoreContainer.style.display = 'block';
+            } else {
+                loadMoreContainer.style.display = 'none';
+            }
+        }
+
+        // Load more episodes
+        function loadMoreEpisodes() {
+            const button = event.target.closest('.load-more-btn');
+            button.disabled = true;
+            button.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                displayEpisodes(filteredEpisodes, true);
+                button.disabled = false;
+                button.style.opacity = '1';
+            }, 300);
+        }
+
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                
+                if (searchTerm === '') {
+                    isSearching = false;
+                    filteredEpisodes = allEpisodes;
+                    displayEpisodes(filteredEpisodes);
+                } else {
+                    isSearching = true;
+                    filteredEpisodes = allEpisodes.filter(episode => 
+                        episode.title.toLowerCase().includes(searchTerm) ||
+                        episode.description.toLowerCase().includes(searchTerm)
+                    );
+                    displayEpisodes(filteredEpisodes);
+                }
+            });
+        }
+
+        // Parse RSS feed
+        async function loadEpisodes() {
+            try {
+                const response = await fetch(`${CORS_PROXY}${encodeURIComponent(RSS_URL)}`);
+                const data = await response.json();
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(data.contents, 'text/xml');
+                
+                const items = xml.querySelectorAll('item');
+                allEpisodes = Array.from(items).map(item => ({
+                    title: item.querySelector('title').textContent,
+                    description: item.querySelector('description').textContent,
+                    pubDate: item.querySelector('pubDate').textContent,
+                    enclosure: item.querySelector('enclosure').getAttribute('url'),
+                    duration: parseInt(item.querySelector('duration').textContent)
+                }));
+                
+                filteredEpisodes = allEpisodes;
+                displayEpisodes(filteredEpisodes);
+                setupSearch();
+            } catch (error) {
+                console.error('Error loading episodes:', error);
+                document.getElementById('episodesContainer').innerHTML = 
+                    '<p style="text-align: center; color: var(--medium-sage);">Error loading episodes. Please try again later.</p>';
+            }
+        }
+
+        // Load episodes when page loads
+        document.addEventListener('DOMContentLoaded', loadEpisodes);
+    </script>
+</body>
+</html>

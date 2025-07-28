@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Not Another Depressed Teen - A Mental Health Podcast</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f5ebe8;
+            --dark-green: #3f4c40;
+            --light-sage: #bcc5b4;
+            --medium-sage: #6c7568;
+            --dark-brown: #5d594e;
+            --light-beige: #e5e3c6;
+            --olive: #606452;
+            --pale-sage: #dae4d1;
+            --taupe: #8d8e7a;
+            --warm-gray: #8f8c84;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--dark-green);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(245, 235, 232, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--medium-sage);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--olive);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--dark-green);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark-green);
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-text {
+            animation: slideInLeft 1s ease-out;
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--dark-green), var(--olive));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--medium-sage);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .logo-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 2rem;
+            position: relative;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        .main-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 3px solid var(--light-sage);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover .main-logo {
+            transform: scale(1.05);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+            border-color: var(--olive);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .hero-images {
+            position: relative;
+            animation: slideInRight 1s ease-out;
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .podcast-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .image-container:hover .podcast-image {
+            transform: scale(1.05);
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape1 {
+            width: 300px;
+            height: 300px;
+            background: var(--light-sage);
+            top: 10%;
+            left: -5%;
+            animation-delay: 0s;
+        }
+
+        .shape2 {
+            width: 200px;
+            height: 200px;
+            background: var(--pale-sage);
+            bottom: 20%;
+            right: -10%;
+            animation-delay: 5s;
+        }
+
+        .shape3 {
+            width: 250px;
+            height: 250px;
+            background: var(--light-beige);
+            top: 50%;
+            left: 50%;
+            animation-delay: 10s;
+        }
+
+        /* About Section */
+        .about {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(218, 228, 209, 0.3), rgba(188, 197, 180, 0.3));
+            position: relative;
+        }
+
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about h2 {
+            font-size: 2.5rem;
+            color: var(--dark-green);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.2s;
+        }
+
+        .about-content {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.4s;
+        }
+
+        .about p {
+            font-size: 1.1rem;
+            color: var(--medium-sage);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .topics {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .topics h3 {
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+        }
+
+        .topics ul {
+            list-style: none;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .topics li {
+            padding: 0.5rem 0;
+            color: var(--medium-sage);
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .topics li::before {
+            content: '✦';
+            position: absolute;
+            left: 0;
+            color: var(--olive);
+        }
+
+        /* Hosts Section */
+        .hosts {
+            padding: 4rem 2rem;
+            background: var(--bg-primary);
+        }
+
+        .hosts-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hosts h2 {
+            font-size: 2.5rem;
+            color: var(--dark-green);
+            margin-bottom: 2rem;
+        }
+
+        .hosts-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(229, 227, 198, 0.3));
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            padding: 3rem 2rem;
+            background: rgba(143, 140, 132, 0.1);
+        }
+
+        .disclaimer-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .disclaimer h3 {
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+        }
+
+        .disclaimer p {
+            color: var(--warm-gray);
+            line-height: 1.8;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-green);
+            color: var(--bg-primary);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-content a {
+            color: var(--light-sage);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-content a:hover {
+            color: var(--bg-primary);
+        }
+
+        /* Animations */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(50px, -30px) scale(1.1);
+            }
+            50% {
+                transform: translate(-30px, 50px) scale(0.9);
+            }
+            75% {
+                transform: translate(30px, 30px) scale(1.05);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-images {
+                order: 1;
+            }
+            
+            .hero-text {
+                order: -1;
+            }
+
+            .logo-container {
+                width: 120px;
+                height: 120px;
+            }
+
+            .about h2, .hosts h2 {
+                font-size: 2rem;
+            }
+
+            .topics ul {
+                padding: 0 1rem;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Loading animation */
+        .content-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">NADT</a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="podcast.html">Podcast</a></li>
+                <li><a href="connectivitystudy.html">Connectivity Study</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Suggestions & Questions</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="floating-shapes">
+            <div class="shape shape1"></div>
+            <div class="shape shape2"></div>
+            <div class="shape shape3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="logo-container">
+                    <img src="logo.png" 
+                         alt="Not Another Depressed Teen Logo" 
+                         class="main-logo">
+                </div>
+                <h1>Not Another Depressed Teen</h1>
+                <p>Bridging the gap between parents and teens through honest conversations about mental health</p>
+            </div>
+            <div class="hero-images">
+                <div class="image-container">
+                    <img src="hostspfp.png" 
+                         alt="Podcast Hosts" 
+                         class="podcast-image">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about content-section">
+        <div class="about-container">
+            <h2>Our Mission</h2>
+            <div class="about-content">
+                <p>Parenting has always been difficult, now more so than ever. With an explosion of mental illnesses in youth, many parents feel powerless to help their child cope with emotional difficulties. Teens feel alone and misunderstood, while their parents feel lost on how to help.</p>
+                <p>It can be difficult to find easy-to-understand advice on how to raise a teen going through mental health problems. Not Another Depressed Teen strives to help bridge this gap in communication and is a podcast for any parent who wants to learn how to help their teen grow to their fullest potential.</p>
+                
+                <div class="topics">
+                    <h3>What We Cover</h3>
+                    <p>Each episode we interview professors, therapists, and other mental health professionals to learn the best methods to support your child. Together, we cover:</p>
+                    <ul>
+                        <li>How to know whether your child needs more support for their mental health</li>
+                        <li>How to access mental health resources</li>
+                        <li>How to create and maintain a healthy relationship with your child</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hosts Section -->
+    <section class="hosts content-section">
+        <div class="hosts-container">
+            <h2>About the Hosts</h2>
+            <div class="hosts-content">
+                <p>Aanya and Pranjal Bhartia are students from the San Francisco Bay Area. After experiencing the negative effects of mental illness in our community, we decided to create this podcast in an effort to understand why mental illnesses have become so common, and what we can do to face them together rather than suffering through them alone.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disclaimer -->
+    <section class="disclaimer content-section">
+        <div class="disclaimer-container">
+            <h3>Medical Disclaimer</h3>
+            <p>We are not doctors, psychologists, therapists, or counselors and this podcast is not a substitute for medical care. All of the content is purely for education and informational purposes. The information on this website is intended to help others by providing general advice. Always consult a health care professional if you or a loved one need support for your mental or physical health.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>Questions? Reach out to us at <a href="mailto:info@notanotherdepressedteen.com">info@notanotherdepressedteen.com</a></p>
+            <p>&copy; 2023 Not Another Depressed Teen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.content-section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '100%';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.background = 'var(--bg-primary)';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.padding = '2rem';
+            navLinks.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Parallax effect for floating shapes
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.shape');
+            
+            shapes.forEach((shape, index) => {
+                const speed = 0.5 + (index * 0.1);
+                shape.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

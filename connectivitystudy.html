@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connectivity Study - Not Another Depressed Teen</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="apple-touch-icon" href="icon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #f5ebe8;
+            --dark-green: #3f4c40;
+            --light-sage: #bcc5b4;
+            --medium-sage: #6c7568;
+            --dark-brown: #5d594e;
+            --light-beige: #e5e3c6;
+            --olive: #606452;
+            --pale-sage: #dae4d1;
+            --taupe: #8d8e7a;
+            --warm-gray: #8f8c84;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: var(--bg-primary);
+            color: var(--dark-green);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(245, 235, 232, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--medium-sage);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--olive);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--dark-green);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark-green);
+            transition: all 0.3s ease;
+        }
+
+        /* Study Hero Section */
+        .study-hero {
+            margin-top: 80px;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(218, 228, 209, 0.3), rgba(188, 197, 180, 0.3));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .study-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--light-sage) 0%, transparent 70%);
+            opacity: 0.1;
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .study-hero-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .study-hero h1 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .study-hero .subtitle {
+            font-size: 1.25rem;
+            color: var(--medium-sage);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        /* Abstract Section */
+        .abstract-section {
+            padding: 4rem 2rem;
+            background: var(--bg-primary);
+        }
+
+        .abstract-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .abstract-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.8s ease-out 0.4s forwards;
+        }
+
+
+
+        .abstract-card h2 {
+            font-size: 2rem;
+            color: var(--dark-green);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .abstract-card h2::before {
+            content: '📊';
+            font-size: 2.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .abstract-text {
+            color: var(--medium-sage);
+            line-height: 1.8;
+            font-size: 1.1rem;
+            text-align: justify;
+        }
+
+        /* Key Findings */
+        .findings-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(229, 227, 198, 0.2), rgba(218, 228, 209, 0.2));
+        }
+
+        .findings-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .findings-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--dark-green);
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .findings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .finding-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .finding-card:nth-child(1) { animation-delay: 0.1s; }
+        .finding-card:nth-child(2) { animation-delay: 0.2s; }
+        .finding-card:nth-child(3) { animation-delay: 0.3s; }
+        .finding-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .finding-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .finding-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+            text-align: center;
+        }
+
+        .finding-card h3 {
+            color: var(--dark-green);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .finding-card p {
+            color: var(--medium-sage);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Study Link Section */
+        .study-link-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: var(--bg-primary);
+        }
+
+        .study-link-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .study-link-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            background: linear-gradient(135deg, var(--dark-green), var(--olive));
+            color: var(--bg-primary);
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .study-link-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .study-link-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .study-link-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .study-link-button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-green);
+            color: var(--bg-primary);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .footer-content a {
+            color: var(--light-sage);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-content a:hover {
+            color: var(--bg-primary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .study-hero h1 {
+                font-size: 2rem;
+            }
+
+            .study-hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .abstract-card {
+                padding: 2rem;
+            }
+
+            .abstract-card h2 {
+                font-size: 1.5rem;
+            }
+
+            .findings-title {
+                font-size: 2rem;
+            }
+
+            .findings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth Scroll */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">NADT</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="podcast.html">Podcast</a></li>
+                <li><a href="#" class="active">Connectivity Study</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Suggestions & Questions</a></li>
+            </ul>
+            <div class="mobile-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Study Hero Section -->
+    <section class="study-hero">
+        <div class="study-hero-content">
+            <h1>Social Connections and Mental Health among High School Students in Fremont, California</h1>
+            <p class="subtitle">A Research Study</p>
+        </div>
+    </section>
+
+    <!-- Abstract Section -->
+    <section class="abstract-section">
+        <div class="abstract-container">
+            <div class="abstract-card">
+                <h2>Abstract</h2>
+                <p class="abstract-text">
+                    The main objective of this study is to identify what types of social connections, and in what amounts, are correlated with rates of depression and anxiety in adolescents (14-18 years old). A survey containing questions on types and frequencies of social interactions was distributed to 184 students at Irvington High School in Fremont, California, along with the PHQ-9 depression and anxiety questionnaires. Five types of social interactions were analyzed: interactions with friends, social media, family time, conversation topics with family and friends, and meal behavior. Four variables were found to have a strong correlation with depression: time spent on short video platforms (p = .00), frequency of family meals (p = .00), frequency of discussions between children and parents about the child's social life (p = .01), and time spent with family (p = .02). Three variables were found to have a strong correlation with anxiety: time spent on short video platforms (p = .00), frequency of family meals (p = .00), and time spent with family (p = .05). The results of this study indicate that students who spend less time on short video platforms and more time with their family have better mental health on average.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Findings Section -->
+    <section class="findings-section">
+        <div class="findings-container">
+            <h2 class="findings-title">Key Findings</h2>
+            <div class="findings-grid">
+                <div class="finding-card">
+                    <span class="finding-icon">📱</span>
+                    <h3>Social Media Impact</h3>
+                    <p>Time spent on short video platforms showed the strongest correlation with both depression and anxiety levels.</p>
+                </div>
+                <div class="finding-card">
+                    <span class="finding-icon">🍽️</span>
+                    <h3>Family Meals Matter</h3>
+                    <p>Regular family meals were significantly associated with lower rates of depression and anxiety.</p>
+                </div>
+                <div class="finding-card">
+                    <span class="finding-icon">👨‍👩‍👧‍👦</span>
+                    <h3>Family Time</h3>
+                    <p>Students who spent more quality time with family showed better mental health outcomes.</p>
+                </div>
+                <div class="finding-card">
+                    <span class="finding-icon">💬</span>
+                    <h3>Open Communication</h3>
+                    <p>Parent-child discussions about social life correlated with reduced depression rates.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Study Link Section -->
+    <section class="study-link-section">
+        <div class="study-link-container">
+            <a href="https://drive.google.com/file/d/1ekWh9JgKMga6s7v5Yx1yqg26SRGkw_9Y/view?usp=sharing" class="study-link-button">
+                <span>Read the Full Study</span>
+                <span>→</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>Questions? Reach out to us at <a href="mailto:info@notanotherdepressedteen.com">info@notanotherdepressedteen.com</a></p>
+            <p>&copy; 2023 Not Another Depressed Teen. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            navLinks.style.position = 'absolute';
+            navLinks.style.top = '100%';
+            navLinks.style.left = '0';
+            navLinks.style.right = '0';
+            navLinks.style.background = 'var(--bg-primary)';
+            navLinks.style.flexDirection = 'column';
+            navLinks.style.padding = '2rem';
+            navLinks.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Add ripple effect to button
+        const studyButton = document.querySelector('.study-link-button');
+        studyButton.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    </script>
+</body>
+</html>
