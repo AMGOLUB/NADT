@@ -129,7 +129,8 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            width: 100%;
         }
 
         /* Background Animation */
@@ -627,6 +628,8 @@
             .content-wrapper {
                 grid-template-columns: 1fr;
                 gap: 3rem;
+                max-width: 100%;
+                padding: 0;
             }
 
             .form-row {
